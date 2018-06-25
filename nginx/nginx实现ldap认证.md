@@ -20,7 +20,4 @@
   ./configure
   make && make install
   ```
-  ##### tengine默认安装目录为:/usr/loca/nginx
-
-
-  
+### 5.编译nginx ldap模块
