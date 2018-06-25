@@ -20,4 +20,22 @@
   ./configure
   make && make install
   ```
+  tengine默认安装目录为:/usr/loca/nginx.
 ### 5.编译nginx ldap模块
+  假设此处ldap认证模块文件目录为:/usr/local/nginx-auth-ldap.
+  ```
+  编译nginx ldap认证模块
+  cd /usr/loca/nginx/sbin
+  ./dso_tool --add-module=/usr/local/nginx-auth-ldap
+  ```
+### 6.加载nginx ldap模块
+  ```
+  vim nginx.conf
+  events {
+    worker_connections  1024;
+  }
+  dso {
+    load ngx_http_auth_ldap_module.so;
+  }
+  ```
+  
