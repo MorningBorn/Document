@@ -38,4 +38,29 @@
     load ngx_http_auth_ldap_module.so;
   }
   ```
+### 7.配置nginx ldap认证
+  ###### 以下两段配置均在http段进行配置。
+  配置ldap认证服务器信息.
+  ```
+  ldap_server xxx-ldap {
+      url ldap://ldap服务器ip:port/DC=xxx,DC=com?cn?sub?(objectClass=person);
+      binddn "cn=xxx,dc=xxx,dc=xxx";
+      binddn_passwd "binddn密码";
+      group_attribute uniquemember;
+      group_attribute_is_dn on;
+      require valid_user;
+  }
+  ```
+  配置location段使用ldap认证.
+  ```
+  server {
+    listen       80;
+    server_name  localhost;
+    location /status {
+      stub_status on;
+      auth_ldap "Forbidden";
+      auth_ldap_servers xxx-ldap;
+  }
+  ```
+  ###### 此处ldap认证使用cn作为用户名进行认证。
   
