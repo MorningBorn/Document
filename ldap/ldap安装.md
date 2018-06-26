@@ -30,3 +30,31 @@
   修改完成内容如下：
     olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" read by dn.base="cn=root,dc=peilian,dc=com" read by * none
   ```
+### 5.检测ldap配置文件以及版本号
+  ```
+  检查配置文件。
+  slaptest -u
+  输出如下：
+    5b0502de ldif_read_file: checksum error on "/etc/openldap/slapd.d/cn=config/olcDatabase={1}monitor.ldif"
+    5b0502de ldif_read_file: checksum error on "/etc/openldap/slapd.d/cn=config/olcDatabase={2}hdb.ldif"
+    config file testing succeeded
+  表明基本配置文件验证通过。由于这两个文件有crc校验，因此修改完成之后，crc校验失败，会报错，该错误克忽略。
+  
+  查看版本号。
+  slapd -VV
+  ```
+### 6.启动ldap服务
+  ```
+  service slapd start
+  ```
+### 7.配置ldap数据库存储
+  ```
+  复制基本的数据库配置：
+  cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+
+  修改ldap数据库配置目录所属用户
+  chown ldap:ldap -R /var/lib/ldap
+
+  修改ldap数据库配置目录权限
+  chmod 700 -R /var/lib/ldap
+  ```
