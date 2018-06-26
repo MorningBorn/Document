@@ -3,6 +3,7 @@
 *LDAP：2.4.44
 
 前提条件：关闭防火墙、selinux，同时进行时钟同步。
+其中XXX需要用域名进行替换，例如example.com，则需要将xxx修改为example.
 
 ### 1.安装软件
   ```
