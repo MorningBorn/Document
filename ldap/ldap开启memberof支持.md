@@ -82,3 +82,7 @@
   ```
   ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b cn=config dn
   ```
+### 7.查看用户的memberof信息
+  ```
+  ldapsearch -LL -Y EXTERNAL -H ldapi:/// "(uid=xxxxxx)" -b dc=xxx,dc=com dn memberof
+  ```
