@@ -18,8 +18,8 @@
   ```
   vim /etc/openldap/slapd.d/cn=config/olcDatabase\=\{2\}hdb.ldif
   需要修改内容如下：
-    olcSuffix: dc=peilian,dc=com    #修改dc名称
-    olcRootDN: cn=root,dc=peilian,dc=com    #修改cn名称、dc名称
+    olcSuffix: dc=xxx,dc=com    #修改dc名称
+    olcRootDN: cn=root,dc=xxx,dc=com    #修改cn名称、dc名称
     olcRootPW: {SSHA}o7XgtJ7XNKKm7qOrtinHqiN7xZ4+gYI9   #该行为新增行，指定管理员密码，该行为新增行
   ```
 ### 4.修改监控文件管理员信息
@@ -28,7 +28,7 @@
   原有行内容如下：
     olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" read by dn.base="cn=Manager,dc=my-domain,dc=com" read by * none
   修改完成内容如下：
-    olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" read by dn.base="cn=root,dc=peilian,dc=com" read by * none
+    olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" read by dn.base="cn=root,dc=xxx,dc=com" read by * none
   ```
 ### 5.检测ldap配置文件以及版本号
   ```
@@ -43,11 +43,7 @@
   查看版本号。
   slapd -VV
   ```
-### 6.启动ldap服务
-  ```
-  service slapd start
-  ```
-### 7.配置ldap数据库存储
+### 6.配置ldap数据库存储
   ```
   复制基本的数据库配置：
   cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
@@ -57,4 +53,57 @@
 
   修改ldap数据库配置目录权限
   chmod 700 -R /var/lib/ldap
+  ```
+### 7.启动ldap服务
+  ```
+  service slapd start
+  ```
+### 8.导入基本的数据库schema
+  ```
+  ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+  ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
+  ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
+  ```
+### 9.修改mail domain、base、schema配置
+  ```
+  vim /usr/share/migrationtools/migrate_common.ph
+    修改之前：
+        $DEFAULT_MAIL_DOMAIN = "padl.com";
+        $DEFAULT_BASE = "dc=padl,dc=com";
+        $EXTENDED_SCHEMA = 0;
+    修改之后：
+        $DEFAULT_MAIL_DOMAIN = "xxx.com";
+        $DEFAULT_BASE = "dc=xxx,dc=com";
+        $EXTENDED_SCHEMA = 1;
+  ```
+### 10.基础配置文件，新增基础信息
+  ```
+  dn: dc=xxx,dc=com
+  o: xxx com
+  dc: xxx
+  objectClass: top
+  objectClass: dcObject
+  objectclass: organization
+
+  dn: cn=root,dc=xxx,dc=com
+  cn: root
+  objectClass: organizationalRole
+  description: Directory Manager
+
+  dn: ou=ops,dc=xxx,dc=com
+  ou: ops
+  objectClass: top
+  objectClass: organizationalUnit
+
+  dn: ou=developer,dc=xxx,dc=com
+  ou: developer
+  objectClass: top
+  objectClass: organizationalUnit
+  ```
+### 导入基础配置文件
+  ```
+  ldapadd -x -w "xxxxxxxxx" -D "cn=root,dc=xxxx,dc=com" -f /root/base.ldif
+  -w:指明管理员账户密码
+  -D:指明管理员basedn信息
+  -f /root/base.ldif:指明要添加的配置文件路径
   ```
