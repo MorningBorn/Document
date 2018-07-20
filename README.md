@@ -1,6 +1,5 @@
 ### document
 ### 帮助文档
-![test](./images/test.png)
 
 python3解决：ModuleNotFoundError: No module named 'ConfigParser'
 cd /usr/lib/python3.6/
