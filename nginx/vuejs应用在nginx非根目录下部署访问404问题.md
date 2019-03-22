@@ -4,20 +4,20 @@
 
 一方面需要开发进行解决，另一方面需要运维解决。  
 
-+ 1、开发人员修改项目router配置，如下：
+# 1、开发人员修改项目router配置，如下：
 借用别人图片，请将vuejs-admin修改成hippo。    
 
-+ 2、开发人员修改build下静态资源加载路径前缀，如下：
+# 2、开发人员修改build下静态资源加载路径前缀，如下：
 借用别人图片，请将vuejs-admin修改成hippo。这里要修改assetsPublicPath为/hippo/地址  
 
 
 
-+ 3、执行打包命令npm run build，确保所有静态资源均是相对地址/hippo/开头，如下：
+# 3、执行打包命令npm run build，确保所有静态资源均是相对地址/hippo/开头，如下：
 借用别人图片，请将vuejs-admin修改成hippo。  
 
 
 
-+ 4、运维人员修改nginx配置文件，如下：
+# 4、运维人员修改nginx配置文件，如下：
 
 请必须保证所有代码放在hippo该目录下，才可以正常访问。
 ```
@@ -37,4 +37,4 @@ server {
     }
 }
 ```
-+ 5、重新reload nginx即可。
+# 5、重新reload nginx即可。
